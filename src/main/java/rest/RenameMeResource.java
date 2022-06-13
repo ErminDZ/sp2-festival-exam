@@ -7,8 +7,10 @@ import facades.FacadeExample;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("xxx")
@@ -32,5 +34,21 @@ public class RenameMeResource {
         long count = FACADE.getRenameMeCount();
         //System.out.println("--------------->"+count);
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
+    }
+
+    @Path("shows")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllShows(){
+        return Response.ok(GSON.toJson(FACADE.getAllShows())).build();
+    }
+
+    //RolesAllowed not added for easier testing
+    @Path("shows/{id}")
+    //@RolesAllowed("user")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getShowsIAmAssignTo(@PathParam("id") long id) {
+        return Response.ok(GSON.toJson(FACADE.getShowsIAmAssignTo(id))).build();
     }
 }

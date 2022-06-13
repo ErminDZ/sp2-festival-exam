@@ -1,6 +1,8 @@
 package facades;
 
+import dtos.MovieDTO;
 import dtos.RenameMeDTO;
+import entities.Movie;
 import entities.RenameMe;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -76,6 +78,20 @@ public class FacadeExample {
         TypedQuery<RenameMe> query = em.createQuery("SELECT r FROM RenameMe r", RenameMe.class);
         List<RenameMe> rms = query.getResultList();
         return RenameMeDTO.getDtos(rms);
+    }
+
+    public List<MovieDTO> getAllShows(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ", Movie.class);
+        List<Movie> m = query.getResultList();
+        System.out.println(m);
+        return MovieDTO.getDtos(m);
+    }
+
+    public MovieDTO getShowsIAmAssignTo(long movieId) {
+        EntityManager em = emf.createEntityManager();
+        Movie m = em.find(Movie.class, movieId);
+        return new MovieDTO(m);
     }
     
     public static void main(String[] args) {
