@@ -84,4 +84,16 @@ public class MovieDTO {
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
+
+    @Override
+    public String toString() {
+        return "MovieDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                ", location='" + location + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", startTime='" + startTime + '\'' +
+                '}';
+    }
 }

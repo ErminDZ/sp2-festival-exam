@@ -2,13 +2,15 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.FestivalDTO;
+import dtos.GuestDTO;
+import dtos.MovieDTO;
+import entities.Guest;
+import entities.Movie;
 import utils.EMF_Creator;
 import facades.FacadeExample;
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -43,12 +45,40 @@ public class RenameMeResource {
         return Response.ok(GSON.toJson(FACADE.getAllShows())).build();
     }
 
+
+
     //RolesAllowed not added for easier testing
-    @Path("shows/{id}")
-    //@RolesAllowed("user")
-    @GET
+    @Path("createShow")
+    //@RolesAllowed("admin")
+    @POST
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getShowsIAmAssignTo(@PathParam("id") long id) {
-        return Response.ok(GSON.toJson(FACADE.getShowsIAmAssignTo(id))).build();
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createShow(String Movie) {
+        MovieDTO m = GSON.fromJson(Movie, MovieDTO.class);
+        MovieDTO mo = FACADE.createShow(m);
+        return Response.ok(mo).build();
+    }
+
+    //RolesAllowed not added for easier testing
+    @Path("createGuest")
+    //@RolesAllowed("admin")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createGuest(String Guest) {
+        GuestDTO g = GSON.fromJson(Guest, GuestDTO.class);
+        GuestDTO gu = FACADE.createGuest(g);
+        return Response.ok(gu).build();
+    }
+    //RolesAllowed not added for easier testing
+    @Path("createFestival")
+    //@RolesAllowed("admin")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createFestival(String Festival) {
+        FestivalDTO f = GSON.fromJson(Festival, FestivalDTO.class);
+        FestivalDTO fe = FACADE.createFestival(f);
+        return Response.ok(fe).build();
     }
 }

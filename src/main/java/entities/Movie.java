@@ -90,4 +90,23 @@ public class Movie implements Serializable {
     public void setGuests(List<Guest> guests) {
         this.guests = guests;
     }
+
+    public void addGuests(Guest guest) {
+        if (!guest.getMovies().contains(this)){
+            guest.getMovies().add(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                ", location='" + location + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", guests=" + guests +
+                '}';
+    }
 }

@@ -1,13 +1,19 @@
 package facades;
 
+import dtos.FestivalDTO;
+import dtos.GuestDTO;
 import dtos.MovieDTO;
 import dtos.RenameMeDTO;
+import entities.Festival;
+import entities.Guest;
 import entities.Movie;
 import entities.RenameMe;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.core.Response;
 
 //import errorhandling.RenameMeNotFoundException;
 import utils.EMF_Creator;
@@ -88,16 +94,109 @@ public class FacadeExample {
         return MovieDTO.getDtos(m);
     }
 
-    public MovieDTO getShowsIAmAssignTo(long movieId) {
+    public List<MovieDTO> getShowsByGuest(long id) {
         EntityManager em = emf.createEntityManager();
-        Movie m = em.find(Movie.class, movieId);
+        TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m WHERE m.id =:id", Movie.class);
+        query.setParameter("id", id);
+        List<Movie> gs = query.getResultList();
+        System.out.println("Testing getShowsByGuest \n" + gs);
+        return MovieDTO.getDtos(gs);
+    }
+
+    public GuestDTO assignShow(long guestId, long movieID) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Guest g = em.find(Guest.class, guestId);
+            Movie m = em.find(Movie.class, movieID);
+
+            g.addMovies(m);
+            m.addGuests(g);
+
+            em.getTransaction().begin();
+            em.merge(g);
+            em.getTransaction().commit();
+            return new GuestDTO(g);
+        } finally {
+            em.close();
+        }
+    }
+
+
+    public MovieDTO createShow(MovieDTO mo) {
+        Movie m = new Movie(mo.getName(),mo.getDuration(),mo.getLocation(),mo.getStartDate(),mo.getStartTime());
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(m);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        System.out.println("hej" + m);
         return new MovieDTO(m);
+    }
+
+    public GuestDTO createGuest(GuestDTO gu) {
+        Guest g = new Guest(gu.getName(),gu.getPhone(),gu.getEmail(),gu.getStatus(),new Movie(),new Festival());
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(g);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        System.out.println("hej" + g);
+        return new GuestDTO(g);
+    }
+
+    public FestivalDTO createFestival(FestivalDTO fe) {
+        Festival f = new Festival(fe.getName(),fe.getCity(),fe.getStartDate(),fe.getDuration());
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(f);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        System.out.println("hej" + f);
+        return new FestivalDTO(f);
+    }
+    
+
+    public Response deleteShow(long id) {
+        EntityManager em= emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query q = em.createQuery("DELETE FROM Movie m WHERE m.id = :id").setParameter("id", id);
+            q.executeUpdate();
+            em.getTransaction().commit();
+            return Response.ok().build();
+        } finally {
+            em.close();
+        }
     }
     
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
         FacadeExample fe = getFacadeExample(emf);
-        fe.getAll().forEach(dto->System.out.println(dto));
+        //fe.deleteShow(2);
+
+        fe.getShowsByGuest(1);//Virker ikke
+
+        //fe.assignShow(1,1);
+
+        //MovieDTO mo = new MovieDTO(1L,"hej",4,"hej","gje","ngei");
+        //fe.createShow(mo);
+
+//        GuestDTO gu = new GuestDTO(1L,"eighbne",5256325,"heigie@","godkent");
+//        fe.createGuest(gu);
+
+        //FestivalDTO fes = new FestivalDTO(1L,"eigbneig","eigei","iegbne",1);
+        //fe.createFestival(fes);
+
+
     }
 
 }

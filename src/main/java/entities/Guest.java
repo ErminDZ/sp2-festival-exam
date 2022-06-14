@@ -26,11 +26,13 @@ public class Guest implements Serializable {
     public Guest() {
     }
 
-    public Guest(String name, int phone, String email, String status, Movie movie) {
+    public Guest(String name, int phone, String email, String status, Movie movie, Festival festival) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.status = status;
+        this.movies = null;
+        this.festival = festival;
     }
 
     public long getId() {
@@ -79,5 +81,35 @@ public class Guest implements Serializable {
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
+    }
+
+    public void addMovies(Movie movie) {
+        if (!movie.getGuests().contains(this)){
+            movie.getGuests().add(this);
+        }
+    }
+
+    public Festival getFestival() {
+        return festival;
+    }
+
+    public void setFestival(Festival festival) {
+        this.festival = festival;
+        if (!festival.getGuests().contains(this)){
+            festival.getGuests().add(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Guest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone=" + phone +
+                ", email='" + email + '\'' +
+                ", status='" + status + '\'' +
+                ", movies=" + movies +
+                ", festival=" + festival +
+                '}';
     }
 }

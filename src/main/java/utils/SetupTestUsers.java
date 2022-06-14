@@ -24,7 +24,7 @@ public class SetupTestUsers {
     User both = new User("user_admin", "test123");
 
     Movie movie1 = new Movie("name",34,"loc","gerbil","neon");
-    Guest guest1 = new Guest("lars",415353,"email","godsend",movie1);
+    Guest guest1 = new Guest("lars",415353,"email","godsend",movie1,new Festival());
     Festival festival1 = new Festival("when","when","re hh",2);
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))

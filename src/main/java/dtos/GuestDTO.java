@@ -11,6 +11,9 @@ public class GuestDTO {
     private int phone;
     private String email;
     private String status;
+    private long showId;
+    private long festivalId;
+
 
     public GuestDTO(Guest g) {
         this.id = g.getId();
@@ -72,5 +75,34 @@ public class GuestDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getShowId() {
+        return showId;
+    }
+
+    public void setShowId(long showId) {
+        this.showId = showId;
+    }
+
+    public long getFestivalId() {
+        return festivalId;
+    }
+
+    public void setFestivalId(long festivalId) {
+        this.festivalId = festivalId;
+    }
+
+    @Override
+    public String toString() {
+        return "GuestDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone=" + phone +
+                ", email='" + email + '\'' +
+                ", status='" + status + '\'' +
+                ", showId=" + showId +
+                ", festivalId=" + festivalId +
+                '}';
     }
 }

@@ -77,6 +77,12 @@ public class Festival implements Serializable {
         this.guests = guests;
     }
 
+    public void addGuests(Guest guest) {
+        this.guests.add(guest);
+        if (guest.getFestival() != this){
+            guest.setFestival(this);
+        }
+    }
 
     @Override
     public String toString() {
