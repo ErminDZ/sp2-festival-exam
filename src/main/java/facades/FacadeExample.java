@@ -86,6 +86,19 @@ public class FacadeExample {
         return RenameMeDTO.getDtos(rms);
     }
 
+    public FestivalDTO getFestivalById(long festivalId) {
+        EntityManager em = emf.createEntityManager();
+        Festival f = em.find(Festival.class, festivalId);
+        return new FestivalDTO(f);
+    }
+
+    public MovieDTO getMovieById(long movieId) {
+        EntityManager em = emf.createEntityManager();
+        Movie m = em.find(Movie.class, movieId);
+        System.out.println("her :" + m);
+        return new MovieDTO(m);
+    }
+
     public List<MovieDTO> getAllShows(){
         EntityManager em = emf.createEntityManager();
         TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ", Movie.class);
@@ -94,13 +107,20 @@ public class FacadeExample {
         return MovieDTO.getDtos(m);
     }
 
-    public List<MovieDTO> getShowsByGuest(long id) {
+    public List<GuestDTO> getAllGuest(){
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m WHERE m.id =:id", Movie.class);
-        query.setParameter("id", id);
-        List<Movie> gs = query.getResultList();
-        System.out.println("Testing getShowsByGuest \n" + gs);
-        return MovieDTO.getDtos(gs);
+        TypedQuery<Guest> query = em.createQuery("SELECT g FROM Guest g ", Guest.class);
+        List<Guest> g = query.getResultList();
+        System.out.println(g);
+        return GuestDTO.getDtos(g);
+    }
+
+    public List<FestivalDTO> getAllFestival(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Festival> query = em.createQuery("SELECT f FROM Festival f ", Festival.class);
+        List<Festival> g = query.getResultList();
+        System.out.println(g);
+        return FestivalDTO.getDtos(g);
     }
 
     public GuestDTO assignShow(long guestId, long movieID) {
@@ -163,7 +183,6 @@ public class FacadeExample {
         System.out.println("hej" + f);
         return new FestivalDTO(f);
     }
-    
 
     public Response deleteShow(long id) {
         EntityManager em= emf.createEntityManager();
@@ -183,20 +202,18 @@ public class FacadeExample {
         FacadeExample fe = getFacadeExample(emf);
         //fe.deleteShow(2);
 
-        fe.getShowsByGuest(1);//Virker ikke
+        //fe.getShowsByGuest(1);//Virker ikke
 
-        //fe.assignShow(1,1);
+        fe.assignShow(1,1);
 
         //MovieDTO mo = new MovieDTO(1L,"hej",4,"hej","gje","ngei");
         //fe.createShow(mo);
 
-//        GuestDTO gu = new GuestDTO(1L,"eighbne",5256325,"heigie@","godkent");
-//        fe.createGuest(gu);
+        //GuestDTO gu = new GuestDTO(1L,"eighbne",5256325,"heigie@","godkent");
+        //fe.createGuest(gu);
 
         //FestivalDTO fes = new FestivalDTO(1L,"eigbneig","eigei","iegbne",1);
         //fe.createFestival(fes);
-
-
     }
 
 }

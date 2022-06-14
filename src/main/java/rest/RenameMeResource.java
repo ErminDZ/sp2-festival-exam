@@ -45,7 +45,31 @@ public class RenameMeResource {
         return Response.ok(GSON.toJson(FACADE.getAllShows())).build();
     }
 
+    @Path("guest")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllGuest(){
+        return Response.ok(GSON.toJson(FACADE.getAllGuest())).build();
+    }
 
+    @Path("festival")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllFestival(){
+        return Response.ok(GSON.toJson(FACADE.getAllFestival())).build();
+    }
+
+    //RolesAllowed not added for easier testing
+    @Path("assignShow/{id}")
+    //@RolesAllowed("admin")
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response assignShow(@PathParam("id") long id, String movie) {
+        MovieDTO g = GSON.fromJson(movie, MovieDTO.class);
+        GuestDTO mEdited = FACADE.assignShow(id, g.getId());
+        return Response.ok(GSON.toJson(mEdited)).build();
+    }
 
     //RolesAllowed not added for easier testing
     @Path("createShow")
@@ -80,5 +104,12 @@ public class RenameMeResource {
         FestivalDTO f = GSON.fromJson(Festival, FestivalDTO.class);
         FestivalDTO fe = FACADE.createFestival(f);
         return Response.ok(fe).build();
+    }
+
+    @Path("deleteshow/{id}")
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteShow(@PathParam("id") long id) {
+        return Response.ok(GSON.toJson(FACADE.deleteShow(id))).build();
     }
 }
